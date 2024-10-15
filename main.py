@@ -29,11 +29,11 @@ class Excution :
 		self.file = DefaultArgs[6]
 	
 	def takeSeq (self) -> [str,None] :
-		seq : str = ""
 		if self.where == "-s" :
 			seq = self.path.upper()
-		if self.where == "-f" and self.lang != "-p" :
+		if self.where == "-f" and self.lang == "-p" :
 			seq = readFasta.readFasta(self.path).upper()
+		
 		return seq
 
 	def checkSeq (seq : str) :

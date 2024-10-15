@@ -22,7 +22,6 @@ pub fn retSeq (fileContent : []u8) []u8 {
 		print ("Error : {}\n",.{err}) ;
 		return &[_]u8{} ;
 	};
-	print ("{d}\n",.{count_new_line});
 	index = 0 ;
 	for (seq) |char| {
 		if (char != 10) {

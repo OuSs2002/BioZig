@@ -1,26 +1,41 @@
 const info = @import("princ.zig") ;
 
-const counter = struct {
+pub const BioError = error {
+	TandUinSameSequence ,
+	UnknownAcidBase ,
+};
+
+pub const counter = struct {
 	A : u32 = 0 ,
 	C : u32 = 0 ,
 	G : u32 = 0 ,
 	T : u32 = 0 ,
 	U : u32 = 0 ,
-	unkown : u32 = 0 ,
+	unknown : u32 = 0 ,
+	Length : usize = 0 ,
+	Type : []const u8 = "NONE",
 };
 
-pub fn CountSeq (seq : []u8) counter {
-	var seqBAcount = counter{};
+pub fn CountSeq (seq : []u8) BioError!counter {
+	var seqBAinfo = counter{};
 	const dna = info.dnaBa{};
+	seqBAinfo.Length = seq.len ;
 	for (seq) |char| {
 		_ = switch (char) {
-			dna.A => seqBAcount.A += 1,
-			dna.C => seqBAcount.C += 1,
-			dna.G => seqBAcount.G += 1,
-			dna.T => seqBAcount.T += 1,
-			dna.U => seqBAcount.U += 1,
-			else => seqBAcount.unkown += 1,
+			dna.A => seqBAinfo.A += 1,
+			dna.C => seqBAinfo.C += 1,
+			dna.G => seqBAinfo.G += 1,
+			dna.T => seqBAinfo.T += 1,
+			dna.U => seqBAinfo.U += 1,
+			else => seqBAinfo.unknown += 1,
 		};
 	}
-	return seqBAcount ;
+	if (seqBAinfo.unknown != 0) {
+		return BioError.UnknownAcidBase ;
+	}
+	if (seqBAinfo.T > 0 and seqBAinfo.U > 0) {
+		return BioError.TandUinSameSequence ;
+	}
+	seqBAinfo.Type = if(seqBAinfo.T > 0) "DNA" else "RNA" ;
+	return seqBAinfo ;
 }

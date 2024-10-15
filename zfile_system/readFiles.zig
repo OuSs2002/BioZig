@@ -20,5 +20,4 @@ pub fn readFile (path : []const u8) []u8 {
 pub fn freeAll (memory : []u8) void {
   defer _ = gpa.deinit() ;
   defer allocator.free(memory) ;
-  std.debug.print("Done\n",.{}) ;
 }

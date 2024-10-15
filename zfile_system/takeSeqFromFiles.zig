@@ -36,7 +36,6 @@ pub fn retSeq (fileContent : []u8) []u8 {
 pub fn freeMemOfSeq (mem : []u8) void {
 	defer _ = gpa.deinit() ;
 	defer allocator.free(mem) ;
-	print ("Done !",.{}) ;
 }
 
 

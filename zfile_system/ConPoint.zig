@@ -22,7 +22,7 @@ export fn takeSeq (path : [*c]const u8) void {
 	Seq.freeMemOfSeq(seq) ;
 }
 
-export fn transcription(path : [*c]const u8) void {
+export fn rnaMaker(path : [*c]const u8) void {
 	const new_path = read(path) ;
 	const fileContent = file.readFile(new_path) ;
 	const seq = Seq.retSeq(fileContent) ;
@@ -33,8 +33,8 @@ export fn transcription(path : [*c]const u8) void {
 	trans.freeSeq(result) ;
 }
 
-test "Test BA counter" {
-	const path = "/home/mykali/Desktop/BC/sequence.fasta";
+export fn seqCount(filePath : [*c]const u8) void {
+	const path = read(filePath);
 	const fileContent = file.readFile(path);
 	const seq = Seq.retSeq(fileContent) ;
 	const seqInfo = count.CountSeq(seq) ;

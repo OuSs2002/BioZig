@@ -7,8 +7,7 @@ sys.path.append("files")
 from file_system import trans 
 from file_system import trad
 from file_system import seqInfo
-
-ziglib = ctype.CDLL("./cfile_system/libtrans.so")
+from file_system import readFasta
 
 if os.path.exists(".cache") != True :
 	os.system("python FVP.py")
@@ -16,28 +15,25 @@ if os.path.exists(".cache") != True :
 class Excution :
 	def __init__(self,Args : list ) :
 		
-		DefaultArgs : list[str] = ["-h" ,"-s" ,"" ,"-f" ,"-short" ,""]
+		DefaultArgs : list[str] = ["-h" , "-p", "-s","" ,"-f" ,"-short" ,""]
 
 		for index in range(len(Args)) :
 			DefaultArgs[index] = Args[index]
 
-		self.job = DefaultArgs[0]  
-		self.where = DefaultArgs[1]
-		self.path = DefaultArgs[2]
-		self.direction = DefaultArgs[3]
-		self.outputType = DefaultArgs[4] 
-		self.file = DefaultArgs[5]
+		self.job = DefaultArgs[0]
+		self.lang = DefaultArgs[1]
+		self.where = DefaultArgs[2]
+		self.path = DefaultArgs[3]
+		self.direction = DefaultArgs[4]
+		self.outputType = DefaultArgs[5] 
+		self.file = DefaultArgs[6]
 	
 	def takeSeq (self) -> [str,None] :
 		seq : str = ""
 		if self.where == "-s" :
 			seq = self.path.upper()
-		elif self.where == "-f" :
-			with open(self.path,mode="r") as file :
-				for line in file :
-					if line[0] != ">" and len(line) != 0 :
-						seq += line.strip().upper()
-						
+		if self.where == "-f" and self.lang != "-p" :
+			seq = readFasta.readFasta(self.path).upper()
 		return seq
 
 	def checkSeq (seq : str) :
@@ -69,31 +65,33 @@ This is the finilly programme to me for DNA traitment
 		assert self.where in ["-s" , "-f"] , Excution.exitClass()
 		assert self.direction in ["-f" , "-b"] , Excution.exitClass() 
 		assert self.outputType in ["-full", "-short", ""] , Excution.exitClass()
-		
+		assert self.lang in ["-p" , "-z"] ,Excution.exitClass()
+
 		if self.job == "-h" :
 			Excution.exitClass()
-
-		seq : str = Excution.takeSeq(self)
-		Excution.checkSeq(seq)
-		info : dict = seqInfo.seqinfo(seq)
 		
-		if self.job == "-info" :
-			seqInfo.pdict(info)
+		if self.lang == "-p" :
+			seq : str = Excution.takeSeq(self)
+			Excution.checkSeq(seq)
+			info : dict = seqInfo.seqinfo(seq)
+		
+			if self.job == "-info" :
+				seqInfo.pdict(info)
 
-		elif self.job == "-Tn" :
-			if info["Type"] == "RNA" :
-				print ("[!] You can't do a transcitpion to an RNA sequnce")
-				exit()
-			else :
-				if self.direction == "-f" :
-					ziglib.display(seq.encode("utf-8"))
-					#result : str = trans.transForward(seq)
-				
+			elif self.job == "-Tn" :
+				if info["Type"] == "RNA" :
+					print ("[!] You can't do a transcitpion to an RNA sequnce")
+					exit()
 				else :
-					result : str = trans.transBackward(seq)
-				#print ("[*] The result is : ",result)
+					if self.direction == "-f" :
+						result : str = trans.transForward(seq)
+				
+					else :
+						result : str = trans.transBackward(seq)
+					
+					print ("[*] The result is : ",result)
 		
-		elif self.job == "-Td" :
+			elif self.job == "-Td" :
 				results : dict = trad.tradSeq(seq,info["Type"])
 				if self.outputType == "-full" :
 					print (results["fullname"])
@@ -101,7 +99,18 @@ This is the finilly programme to me for DNA traitment
 					print (results["shortname"])
 				else :
 					seqInfo.pdict(results)
+		
+		elif self.lang == "-z" :
+			zigTools = ctype.CDLL("./zfile_system/libConPoint.so")
+			
+			if self.job == "-info" :
+				zigTools.seqCount(self.path.encode("utf-8"))
 
+			elif self.job == "-Tn" :
+				zigTools.rnaMaker(self.path.encode("utf-8"))
+
+			elif self.job == "-Td" :
+				pass
 
 commend = Excution(sys.argv[1:len(sys.argv)])
 commend.run()

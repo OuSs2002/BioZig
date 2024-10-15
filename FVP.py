@@ -10,24 +10,34 @@ def shows(s) -> None :
 		time.sleep(0.05)
 	print ()
 
-def finder(t,fold,list_files) -> list :
-	for f in fold :
-		if t in f :
-			list_files.append(f)
+def finder(extention,fold,list_files) -> list :
+	for file in fold :
+		if extention in file :
+			list_files.append(file)
+
 	return list_files
 
 os.system("clear")
 shows("WELCOME TO FVP(THE FILE VERFIRER PROGRAMM) .v1")
-fs = os.listdir("file_system")
+fs1 = os.listdir("file_system")
+fs2 = os.listdir("zfile_system")
 
 finded_files : list = []
 
-finded_files = finder(".py",fs,finded_files)
+finded_files = finder(".py",fs1,finded_files)
+finded_files = finder(".zig",fs2,finded_files)
 
 req_files = [
 	"trad.py",
 	"trans.py",
 	"seqInfo.py",
+	"trad.zig" ,
+	"trans.zig" ,
+	"ConPoint.zig" ,
+	"princ.zig",
+	"readFiles.zig",
+	"BaCount.zig",
+	"takeSeqFromFiles.zig",
 ]
 
 def show(s,isReady) -> None :

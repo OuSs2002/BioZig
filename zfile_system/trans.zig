@@ -23,7 +23,7 @@ pub fn transSeq (seq : []u8) []u8 {
 	return rna ;
 }
 
-pub fn freeSeq (memory : []u8) void {
+pub fn freeMemOf(memory : []u8) void {
 	defer _ = gpa.deinit() ;
 	defer allocator.free(memory);
 }

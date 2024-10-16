@@ -4,6 +4,7 @@ const print = @import("std").debug.print ;
 const trans = @import("trans.zig") ;
 const Seq = @import("takeSeqFromFiles.zig");
 const count = @import("BaCount.zig");
+const Mem = @import("memCont");
 
 const Each = @import("std").meta.fields ;
 
@@ -22,8 +23,8 @@ export fn takeSeq (path : PyString) void {
 	const seq = Seq.retSeq(fileContent) ;
 	print ("The sequence is : {s}\n",.{seq}) ;
 	print ("The length of the seq : {d}\n",.{seq.len}) ;
-	file.freeAll(fileContent) ;
-	Seq.freeMemOfSeq(seq) ;
+	Mem.freeMemOf(fileContent) ;
+	Mem.freeMemOf(seq) ;
 }
 
 export fn rnaMaker(path : PyString) void {

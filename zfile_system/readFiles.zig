@@ -17,7 +17,7 @@ pub fn readFile (path : []const u8) []u8 {
   return fileContent ;
 }
 
-pub fn freeAll (memory : []u8) void {
-  defer _ = gpa.deinit() ;
-  defer allocator.free(memory) ;
+pub fn freeMemOf(memory : []u8) void {
+	defer _ = gpa.deinit() ;
+	defer allocator.free(memory) ;
 }

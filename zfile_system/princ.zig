@@ -4,17 +4,8 @@ pub const dnaBa = struct {
   U : u8 = 85,X : u8 = 88,
 };
 
-//AAnames : [20][:0]const u8 = .{
-//			"Met","Trp","Arg","Phe",
-//			"Ile","Leu","Val","Ser","Cys",
-//
-//			"Gln","His","Pro","Ala",
-//			"Gly","Asp","Glu","Trp",
-//			"   ","Thr","Asn","Lys"
-//		},
-
 pub const AAs = struct { 
-	AAnames : []u8 = .{
+	AAnames : [21]u8 = .{
 		77, 87, 82, 70, 
 		73, 76, 86, 83, 
 		67, 81, 72, 80, 
@@ -23,26 +14,26 @@ pub const AAs = struct {
 		75,
 	},
 	AAcodons : [21][6][:0]const u8 = .{
-		.{"AUG","","","","",""},
-		.{"UGG","","","","",""},
-		.{"CGU","CGC","CGA","CGG","AGA","AGG"},
-		.{"UUU","UUC","","","",""},
-		.{"AUU","AUC","AUA","","",""},
-		.{"UUA","UUG","CUU","CUC","CUA","CUG"},
-		.{"GUU","GUC","GUA","GUG","",""},
-		.{"UCU","UCC","UCA","UCG","",""},
-		.{"UGU","UGC","","","",""},
+		.{"ATG","","","","",""},
+		.{"TGG","","","","",""},
+		.{"CGT","CGC","CGA","CGG","AGA","AGG"},
+		.{"TTT","TTC","","","",""},
+		.{"ATT","ATC","AUA","","",""},
+		.{"TTA","TUG","CTT","CUC","CUA","CUG"},
+		.{"GTT","GTC","GUA","GUG","",""},
+		.{"TCT","TCC","UCA","UCG","",""},
+		.{"TGT","TGC","","","",""},
 		.{"CAA","CAG","","","",""},
-		.{"CAU","CAC","","","",""},
-		.{"CCU","CCC","CCA","CCG","",""},
-		.{"GCU","GCC","GCA","GCG","",""},
-		.{"GGU","GGC","GGA","GGG","",""},
-		.{"GAU","GAC","","","",""},
+		.{"CAT","CAC","","","",""},
+		.{"CCT","CCC","CCA","CCG","",""},
+		.{"GCT","GCC","GCA","GCG","",""},
+		.{"GGT","GGC","GGA","GGG","",""},
+		.{"GAT","GAC","","","",""},
 		.{"GAA","GAG","","","",""},
-		.{"UAU","UAC","","","",""},
-		.{"UAA","UAG","UGA","","",""},
-		.{"ACU","ACC","ACA","ACG","",""},
-		.{"AAU","AAC","","","",""},
+		.{"TAT","TAC","","","",""},
+		.{"TAA","TAG","TGA","","",""},
+		.{"ACT","ACC","ACA","ACG","",""},
+		.{"AAT","AAC","","","",""},
 		.{"AAA","AAG","","","",""},
 	}
 };

@@ -1,12 +1,15 @@
-const file = @import("readFiles.zig") ;
+// file of zig 
 const read = @import("std").mem.span ;
-const print = @import("std").debug.print ;
-const trans = @import("trans.zig") ;
-const Seq = @import("takeSeqFromFiles.zig");
-const count = @import("BaCount.zig");
-const Mem = @import("memCont");
-
 const Each = @import("std").meta.fields ;
+const print = @import("std").debug.print ;
+
+// file from zigFiles to run the programme
+const trans = @import("trans.zig") ;
+const count = @import("BaCount.zig");
+const file = @import("readFiles.zig") ;
+const trad = @import("trad.zig") ;
+const alignm = @import("NW.zig") ;
+const TA = @import("ToolsForAlign.zig") ;
 
 const PyString : type = [*c]const u8 ;
 
@@ -14,39 +17,38 @@ export fn readFasta(path : PyString) void {
   const new_path = read(path) ;
 	const fileContent = file.readFile(new_path) ;
 	print ("The Content : {s}\n",.{fileContent}) ;
-	file.freeAll(fileContent) ;
+	file.freeMemOf(fileContent) ;
 }
 
-export fn takeSeq (path : PyString) void {
+export fn fasta_file_info (path : PyString) void {
 	const new_path = read(path) ;
 	const fileContent = file.readFile(new_path) ;
-	const seq = Seq.retSeq(fileContent) ;
-	print ("The sequence is : {s}\n",.{seq}) ;
-	print ("The length of the seq : {d}\n",.{seq.len}) ;
-	Mem.freeMemOf(fileContent) ;
-	Mem.freeMemOf(seq) ;
+	const fastaInfo = file.readFasta(fileContent) ;
+	fastaInfo.display() ;
+	fastaInfo.deinit() ;
+	file.freeMemOf(fileContent) ;
 }
 
 export fn rnaMaker(path : PyString) void {
 	const new_path = read(path) ;
 	const fileContent = file.readFile(new_path) ;
-	const seq = Seq.retSeq(fileContent) ;
-	const result = trans.transSeq(seq) ;
+	const fastaInfo = file.readFasta(fileContent) ;
+	const result = trans.transSeq(fastaInfo.seq) ;
 	print ("The result : \n{s}\n",.{result}) ;
-	file.freeAll(fileContent) ;
-	Seq.freeMemOfSeq(seq) ;
-	trans.freeSeq(result) ;
+	fastaInfo.deinit() ;
+	trans.freeMemOf(result) ;
+	file.freeMemOf(fileContent) ;
 }
 
-export fn seqCount(filePath : PyString) void {
-	const path = read(filePath);
-	const fileContent = file.readFile(path);
-	const seq = Seq.retSeq(fileContent) ;
-	const seqInfo = count.CountSeq(seq) catch |err| switch (err) {
+export fn seqCount(path : PyString) void {
+	const new_path = read(path);
+	const fileContent = file.readFile(new_path);
+	const fastaInfo = file.readFasta(fileContent) ;
+	const seqInfo = count.CountSeq(fastaInfo.seq) catch |err| switch (err) {
 		count.BioError.UnknownAcidBase ,count.BioError.TandUinSameSequence => {
 			print ("Error : {}\n",.{err});
-			file.freeAll(fileContent);
-			Seq.freeMemOfSeq(seq);
+			fastaInfo.deinit() ;
+			file.freeMemOf(fileContent);
 			return ;
 		},
 	};
@@ -60,7 +62,34 @@ export fn seqCount(filePath : PyString) void {
 			print ("{s} : {s}\n",.{key,value});
 		}
 	}
-	file.freeAll(fileContent);
-	Seq.freeMemOfSeq(seq);
+	fastaInfo.deinit() ;
+	file.freeMemOf(fileContent);
 }
 
+export fn globalAlignment(path_1 : PyString ,
+													path_2 : PyString , 
+													match : u8 , 
+													mmatch : u8 ,
+													gap : u8 ,
+	) void {
+	const path1 = read(path_1) ;
+	const path2 = read(path_2) ;
+	const fileContent1 = file.readFile(path1) ;
+	const fileContent2 = file.readFile(path2) ;
+	const fasta1 = file.readFasta(fileContent1) ;
+	const fasta2 = file.readFasta(fileContent2) ;
+	const seqs = TA.howLonger(fasta1.seq , fasta2.seq) ;
+	var result = alignm.NW(seqs ,match ,mmatch ,gap) ;
+	result.printm() ;
+}
+
+export fn seqTrad(path : PyString) void {
+	const new_path = read(path) ;
+	const fileContent = file.readFile(new_path) ;
+	const fasta = file.readFasta(fileContent) ;
+	const result = trad.tradSeq(fasta.seq) ;
+	print ("The result : {s}\n",.{result}) ;
+	fasta.deinit() ;
+	trad.freeMemOf(result);
+	file.freeMemOf(fileContent) ;
+}

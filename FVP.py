@@ -37,7 +37,9 @@ req_files = [
 	"princ.zig",
 	"readFiles.zig",
 	"BaCount.zig",
-	"takeSeqFromFiles.zig",
+	"ToolsForAlign.zig",
+	"NW.zig",
+	"matrix.zig",
 ]
 
 def show(s,isReady) -> None :

@@ -2,7 +2,6 @@ const print = @import("std").debug.print ;
 const info = @import("princ.zig") ;
 const mem = @import("std").mem ;
 const file = @import("readFiles.zig");
-const Seq = @import("takeSeqFromFiles.zig");
 
 var gpa = @import("std").heap.GeneralPurposeAllocator(.{}){} ;
 const allocator = gpa.allocator();
@@ -15,6 +14,7 @@ pub fn tradSeq (seq : []u8) []u8 {
 		print ("Error : {}\n",.{err});
 		return &[_]u8{} ;
 	} ;
+	
 	var start : usize = 0 ;
 	var end : usize = 3 ;
 	var IndexOfAAseq : usize = 0 ;
@@ -39,17 +39,4 @@ pub fn tradSeq (seq : []u8) []u8 {
 pub fn freeMemOf(memory : []u8) void {
 	defer _ = gpa.deinit() ;
   defer allocator.free(memory) ;
-}
-
-test "Test trad.zig" {
-	const path = "/home/mykali/Desktop/BC/sequence.fasta" ;
-	const fileContent = file.readFile(path) ;
-	const seq = Seq.retSeq(fileContent) ;
-	print ("{d}\n",.{seq.len});
-	const result = tradSeq(seq) ;
-	print ("{d}\n",.{result.len});
-	print ("{s}\n",.{result}) ;
-	file.freeMemOf(fileContent) ;
-	Seq.freeMemOf(seq) ;
-	freeMemOf(result) ;
 }

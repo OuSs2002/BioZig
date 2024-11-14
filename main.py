@@ -61,7 +61,7 @@ This is the finilly programme to me for DNA traitment
 		exit()
 		
 	def run (self) :
-		assert self.job in ["-h" ,"-info" , "-Tn" , "-Td" ] , Excution.exitClass()
+		assert self.job in ["-h" ,"-info" , "-Tn" , "-Td" ,"-NW"] , Excution.exitClass()
 		assert self.where in ["-s" , "-f"] , Excution.exitClass()
 		assert self.direction in ["-f" , "-b"] , Excution.exitClass() 
 		assert self.outputType in ["-full", "-short", ""] , Excution.exitClass()
@@ -101,8 +101,8 @@ This is the finilly programme to me for DNA traitment
 					seqInfo.pdict(results)
 		
 		elif self.lang == "-z" :
-			zigTools = ctype.CDLL("./zfile_system/libConPoint.so")
-			
+			zigTools = ctype.CDLL("./zfile_system/libConPoint.so")	
+
 			if self.job == "-info" :
 				zigTools.seqCount(self.path.encode("utf-8"))
 
@@ -110,7 +110,15 @@ This is the finilly programme to me for DNA traitment
 				zigTools.rnaMaker(self.path.encode("utf-8"))
 
 			elif self.job == "-Td" :
-				pass
+				zigTools.seqTrad(self.path.encode("utf-8"))
+
+			elif self.job == "-NW" :
+				m : int = int(input("[*] put the match : "))
+				mm : int = int(input("[*] put the match : "))
+				gap : int = int(input("[*] put the match : "))
+				path_1 : str = input("[*] Put the path to the fasta file 1 : ")
+				path_2 : str = input("[*] Put the path to the fasta file 1 : ")
+				zigTools.globalAlignment(path_1.encode("utf-8"),path_2.encode("utf-8"),m,mm,gap) 
 
 commend = Excution(sys.argv[1:len(sys.argv)])
 commend.run()

@@ -1,4 +1,4 @@
-# BioZig
+# 🐍 BioZig ⚡
 
 BioZig is toolkit for bioinformatics using a python script powered by [ziglang](https://ziglang.org/)
 

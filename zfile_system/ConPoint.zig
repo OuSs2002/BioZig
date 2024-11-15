@@ -81,6 +81,7 @@ export fn globalAlignment(path_1 : PyString ,
 	const seqs = TA.howLonger(fasta1.seq , fasta2.seq) ;
 	var result = alignm.NW(seqs ,match ,mmatch ,gap) ;
 	result.printm() ;
+	print ("The socre of alignment is : {d}\n",.{result.map[fasta1.seq.len][fasta2.seq.len]}) ;
 }
 
 export fn seqTrad(path : PyString) void {

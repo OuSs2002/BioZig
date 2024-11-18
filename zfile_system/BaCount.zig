@@ -14,6 +14,7 @@ pub const counter = struct {
 	unknown : u32 = 0 ,
 	Length : usize = 0 ,
 	Type : []const u8 = "NONE",
+	GCp : f32 = 0.0 ,
 };
 
 pub fn CountSeq (seq : []u8) BioError!counter {
@@ -36,6 +37,7 @@ pub fn CountSeq (seq : []u8) BioError!counter {
 	if (seqBAinfo.T > 0 and seqBAinfo.U > 0) {
 		return BioError.TandUinSameSequence ;
 	}
+	seqBAinfo.GCp = @as(f32,@floatFromInt(seqBAinfo.C + seqBAinfo.G)) / @as(f32,@floatFromInt(seqBAinfo.Length)) ;
 	seqBAinfo.Type = if(seqBAinfo.T > 0) "DNA" else "RNA" ;
 	return seqBAinfo ;
 }

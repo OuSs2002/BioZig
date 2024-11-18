@@ -13,22 +13,6 @@ const TA = @import("ToolsForAlign.zig") ;
 
 const PyString : type = [*c]const u8 ;
 
-export fn readFasta(path : PyString) void {
-  const new_path = read(path) ;
-	const fileContent = file.readFile(new_path) ;
-	print ("The Content : {s}\n",.{fileContent}) ;
-	file.freeMemOf(fileContent) ;
-}
-
-export fn fasta_file_info (path : PyString) void {
-	const new_path = read(path) ;
-	const fileContent = file.readFile(new_path) ;
-	const fastaInfo = file.readFasta(fileContent) ;
-	fastaInfo.display() ;
-	fastaInfo.deinit() ;
-	file.freeMemOf(fileContent) ;
-}
-
 export fn rnaMaker(path : PyString) void {
 	const new_path = read(path) ;
 	const fileContent = file.readFile(new_path) ;
@@ -52,11 +36,12 @@ export fn seqCount(path : PyString) void {
 			return ;
 		},
 	};
+	fastaInfo.display() ;
 	inline for (Each(count.counter)) |item| {
 		const key = item.name ;
 		const types = item.type ;
 		const value = @field(seqInfo, key) ;
-		if (types == u32 or types == usize) {
+		if (types == u32 or types == usize or types == f32) {
 			print ("{s} : {d}\n",.{key,value});
 		} else {
 			print ("{s} : {s}\n",.{key,value});
@@ -81,7 +66,7 @@ export fn globalAlignment(path_1 : PyString ,
 	const seqs = TA.howLonger(fasta1.seq , fasta2.seq) ;
 	var result = alignm.NW(seqs ,match ,mmatch ,gap) ;
 	result.printm() ;
-	print ("The socre of alignment is : {d}\n",.{result.map[fasta1.seq.len][fasta2.seq.len) ;
+	print ("The socre of alignment is : {d}\n",.{result.map[fasta1.seq.len][fasta2.seq.len]}) ;
 }
 
 export fn seqTrad(path : PyString) void {

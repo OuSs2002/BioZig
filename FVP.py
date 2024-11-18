@@ -68,6 +68,6 @@ if isGood == False :
 	for file in Mess_files :
 		print (f"- {file}")
 else :
-	shows("HAVE A HAPPY DAY")
+	shows("HAVE A PRODECTIVE DAY")
 	os.system("touch .cache")
 

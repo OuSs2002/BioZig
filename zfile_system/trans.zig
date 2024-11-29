@@ -4,7 +4,7 @@ const print = @import("std").debug.print ;
 var gpa = @import("std").heap.GeneralPurposeAllocator(.{}){} ;
 const allocator = gpa.allocator() ;
 
-pub fn transSeq (seq : []u8) []u8 {
+pub fn transSeq (seq : []const u8) []u8 {
 	const dna = info.dnaBa{} ;
 	var rna = allocator.alloc(u8,seq.len) catch |err| {
 		print ("Error : {}\n",.{err}) ;

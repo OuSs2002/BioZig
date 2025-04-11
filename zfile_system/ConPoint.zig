@@ -85,3 +85,9 @@ export fn seqTrad(path : PyString) PyString {
 	const prot = trad.tradSeq(seq) ;
   return prot.ptr ;
 }
+
+
+
+
+
+

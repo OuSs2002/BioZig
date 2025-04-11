@@ -39,7 +39,7 @@ class Bio_libs :
       ziglibs.rnaMaker.argtypes = [ctypes.c_char_p]
       ziglibs.rnaMaker.restype = ctypes.c_char_p
       result = ziglibs.rnaMaker(seq.encode("utf-8"))
-      rna : str = result[0:len(result)-1].decode("utf-8")
+      rna : str = result[0:len(seq)].decode("utf-8")
       return rna
 
   def traduction (seq : str ,lang : str = "-p" ,seqType : str = "DNA") -> str :
@@ -51,7 +51,7 @@ class Bio_libs :
       ziglibs.seqTrad.argtypes = [ctypes.c_char_p]
       ziglibs.seqTrad.restype = ctypes.c_char_p
       result = ziglibs.seqTrad(seq.encode("utf-8"))
-      prot : str = result[0:len(result)].decode("utf-8")
+      prot : str = result[0:int(len(seq)/3)].decode("utf-8")
       return prot
 
   def seq_info (seq : str , lang : str = "-p") -> dict :
@@ -75,12 +75,12 @@ class Bio_libs :
       }
       return seq_info_result 
 
-  def global_align (seq1 : str , seq2 : str , match : int , mmatch : int , gap : int) -> int :
+  def global_align (path_1 : str , path_2 : str , match : int , mmatch : int , gap : int , lang : str) -> int :
     if lang == "-p" :
       result : int = NW(seq1 , seq2 , match , mmatch , gap)
       return result
     elif lang == "-z" :
-      ziglibs.seq(seq1.encode("utf-8"), seq2.encode("utf-8"), match , mmatch ,gap)
+      ziglibs.globalAlignment(path_1.encode("utf-8"), path_2.encode("utf-8"), match , mmatch ,gap)
       return None
 
 

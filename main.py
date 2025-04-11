@@ -69,15 +69,15 @@ This is a programme for DNA traitment :
       if self.lang == "-p" :
         pdict(result)
       else :
-        print (result)
+          print ("the result : ",result)
 
     elif self.job == "-NW" :
       m : int = int(input("[*] put the match : "))
-      mm : int = int(input("[*] put the match : "))
-      gap : int = int(input("[*] put the match : "))
+      mm : int = int(input("[*] put the mismatch : "))
+      gap : int = int(input("[*] put the gap : "))
       path_1 : str = input("[*] Put the path to the fasta file 1 : ")
       path_2 : str = input("[*] Put the path to the fasta file 1 : ")
-      zigTools.globalAlignment(path_1.encode("utf-8"),path_2.encode("utf-8"),m,mm,gap) 
+      Bio_libs.global_align(path_1,path_2,m,mm,gap,self.lang) 
 
 commend = Excution(sys.argv[1:len(sys.argv)])
 commend.run()
